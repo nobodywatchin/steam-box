@@ -52,7 +52,7 @@ RUN curl -S -s -L -O --output-dir /tmp/ --connect-timeout 60 https://github.com/
 # Install LatencyFlex
 RUN wget https://raw.githubusercontent.com/Shringe/LatencyFleX-Installer/main/install.sh -O /usr/bin/latencyflex && \
     sed -i 's@"dxvk.conf"@"/usr/share/latencyflex/dxvk.conf"@g' /usr/bin/latencyflex && \
-    chmod +x /usr/bin/latencyflex
+    chmod +x /usr/bin/latencyflex \
     pacman -S --clean --clean && \
     rm -rf /var/cache/pacman/pkg/*
         # Steam/Lutris/Wine installed separately so they use the dependencies above and don't try to install their own.
