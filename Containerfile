@@ -38,16 +38,21 @@ RUN pacman -Sy \
         glibc-locales \
         --noconfirm && \
 # Install additional packages
-    curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh \
-    sh -c 'rm -f /tmp/user_install_script.sh; if curl -S -s -L -O --output-dir /tmp/ --connect-timeout 60 https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/user_install_script.sh; then bash /tmp/user_install_script.sh; else echo "Something went wrong, please report this if it is a bug"; read; fi' \
     pacman -S \
         lutris \
         mangohud \
         lib32-mangohud \
-        --noconfirm && \
-        wget https://raw.githubusercontent.com/Shringe/LatencyFleX-Installer/main/install.sh -O /usr/bin/latencyflex && \
-        sed -i 's@"dxvk.conf"@"/usr/share/latencyflex/dxvk.conf"@g' /usr/bin/latencyflex && \
-        chmod +x /usr/bin/latencyflex && \
+        --noconfirm \
+# Install EmuDeck and Decky Launcher
+RUN curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash
+
+RUN curl -S -s -L -O --output-dir /tmp/ --connect-timeout 60 https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/user_install_script.sh && \
+    bash /tmp/user_install_script.sh || echo "Something went wrong, please report this if it is a bug"
+
+# Install LatencyFlex
+RUN wget https://raw.githubusercontent.com/Shringe/LatencyFleX-Installer/main/install.sh -O /usr/bin/latencyflex && \
+    sed -i 's@"dxvk.conf"@"/usr/share/latencyflex/dxvk.conf"@g' /usr/bin/latencyflex && \
+    chmod +x /usr/bin/latencyflex
     pacman -S --clean --clean && \
     rm -rf /var/cache/pacman/pkg/*
         # Steam/Lutris/Wine installed separately so they use the dependencies above and don't try to install their own.
