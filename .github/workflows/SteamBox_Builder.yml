@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build SteamBox
-        run: docker build -t ghcr.io/${{ github.repository }}:latest .
+        run: docker build -t ghcr.io/${{ github.repository }}:latest -f Containerfile .
 
       - name: Push SteamBox
         run: docker push ghcr.io/${{ github.repository }}:latest
