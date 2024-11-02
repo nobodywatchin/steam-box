@@ -39,8 +39,6 @@ RUN pacman -S \
         --noconfirm && \
 # Install additional packages
     curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh
-    curl -S -s -L -O --output-dir /tmp/ --connect-timeout 60 https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/user_install_script.sh
-    bash /tmp/user_install_script.sh
     pacman -S \
         lutris \
         mangohud \
