@@ -2,8 +2,7 @@
 FROM lscr.io/linuxserver/steamos:latest
 
 # Install needed packages
-RUN pacman -Sy && \
-    pacman -S
+RUN pacman -Sy \
         paru \
         lib32-vulkan-radeon \
         libva-mesa-driver \
