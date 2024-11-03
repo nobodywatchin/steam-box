@@ -1,9 +1,8 @@
 # Use the SteamOS container as the base
 FROM lscr.io/linuxserver/steamos:latest
 
-# Install initial packages
+# Install core packages without paru
 RUN pacman -Sy --noconfirm \
-        paru \
         lib32-vulkan-radeon \
         libva-mesa-driver \
         intel-media-driver \
@@ -41,10 +40,17 @@ RUN pacman -Sy --noconfirm \
         mangohud \
         lib32-mangohud
 
+# Install paru manually
+RUN pacman -Sy --noconfirm git base-devel && \
+    git clone https://aur.archlinux.org/paru.git /tmp/paru && \
+    cd /tmp/paru && \
+    makepkg -si --noconfirm && \
+    rm -rf /tmp/paru
+
 # Install EmuDeck
 RUN curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash
 
-# Install Decky Loader
+# Install Decky Launcher
 RUN curl -S -s -L -O --output-dir /tmp/ --connect-timeout 60 https://github.com/SteamDeckHomebrew/decky-installer/releases/latest/download/user_install_script.sh && \
     bash /tmp/user_install_script.sh || echo "Something went wrong, please report this if it is a bug"
 
@@ -53,7 +59,7 @@ RUN wget https://raw.githubusercontent.com/Shringe/LatencyFleX-Installer/main/in
     sed -i 's@"dxvk.conf"@"/usr/share/latencyflex/dxvk.conf"@g' /usr/bin/latencyflex && \
     chmod +x /usr/bin/latencyflex
 
-# Install AUR packages
+# Install AUR packages as build user
 RUN useradd -m --shell=/bin/bash build && usermod -L build && \
     echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
