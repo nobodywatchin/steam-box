@@ -1,31 +1,38 @@
 # Use the SteamOS container as the base
 FROM lscr.io/linuxserver/steamos:latest
 
-# Install core packages without paru
-RUN pacman -Sy --noconfirm \
+# Update and upgrade the system packages first
+RUN pacman -Syu --noconfirm
+
+# Install core packages in smaller batches to isolate errors
+RUN pacman -S --noconfirm \
         lib32-vulkan-radeon \
         libva-mesa-driver \
-        intel-media-driver \
+        intel-media-driver && \
+    pacman -S --noconfirm \
         vulkan-mesa-layers \
         lib32-vulkan-mesa-layers \
         lib32-libnm \
         openal \
         pipewire \
-        pipewire-pulse \
+        pipewire-pulse && \
+    pacman -S --noconfirm \
         pipewire-alsa \
         pipewire-jack \
         wireplumber \
         lib32-pipewire \
         lib32-pipewire-jack \
         lib32-libpulse \
-        lib32-openal \
+        lib32-openal && \
+    pacman -S --noconfirm \
         xdg-desktop-portal-kde \
         vim \
         nano \
         hyfetch \
         fish \
         yad \
-        xdg-user-dirs \
+        xdg-user-dirs && \
+    pacman -S --noconfirm \
         xdotool \
         xorg-xwininfo \
         wmctrl \
@@ -34,13 +41,15 @@ RUN pacman -Sy --noconfirm \
         rocm-hip-runtime \
         libbsd \
         noto-fonts-cjk \
-        glibc-locales && \
-    pacman -S --noconfirm \
+        glibc-locales
+
+# Install additional packages that may have dependencies on the core libraries
+RUN pacman -S --noconfirm \
         lutris \
         mangohud \
         lib32-mangohud
 
-# Install paru manually
+# Install paru manually (for AUR support)
 RUN pacman -Sy --noconfirm git base-devel && \
     git clone https://aur.archlinux.org/paru.git /tmp/paru && \
     cd /tmp/paru && \
