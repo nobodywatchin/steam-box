@@ -47,7 +47,7 @@ CMD ["bash", "-c", "echo 'Customized SteamOS container started' && /bin/bash"]
 
 
 # Install paru (for AUR support)
-RUN pacman -Sy --noconfirm git paru
+RUN pacman -Sy --noconfirm git paru zenity
 # Install EmuDeck
 RUN curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash
 
