@@ -1,21 +1,22 @@
 # Use the SteamOS container as the base
 FROM lscr.io/linuxserver/steamos:latest
 
-# Update and upgrade the system packages first
-RUN pacman -Syu --noconfirm
-
-# Install core packages in smaller batches to isolate errors
-RUN pacman -S --noconfirm \
+# Update and install additional packages
+RUN pacman -Syu --noconfirm && \
+    # Set default choice for bluez-libs provider
+    echo "1" | pacman -S --noconfirm \
         lib32-vulkan-radeon \
         libva-mesa-driver \
         intel-media-driver && \
-    pacman -S --noconfirm \
+    echo "1" | pacman -S --noconfirm \
         vulkan-mesa-layers \
         lib32-vulkan-mesa-layers \
         lib32-libnm \
         openal \
         pipewire \
         pipewire-pulse && \
+    # Remove pulseaudio to resolve conflicts with pipewire
+    pacman -Rns --noconfirm pulseaudio && \
     pacman -S --noconfirm \
         pipewire-alsa \
         pipewire-jack \
@@ -48,6 +49,13 @@ RUN pacman -S --noconfirm \
         lutris \
         mangohud \
         lib32-mangohud
+
+# Clean up after install
+RUN pacman -Sc --noconfirm && rm -rf /var/cache/pacman/pkg/*
+
+# Set any necessary environment variables or startup commands
+CMD ["bash", "-c", "echo 'Customized SteamOS container started' && /bin/bash"]
+
 
 # Install paru manually (for AUR support)
 RUN pacman -Sy --noconfirm git base-devel && \
