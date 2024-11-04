@@ -3,7 +3,7 @@ FROM lscr.io/linuxserver/steamos:latest
 
 # Update and install additional packages
 RUN pacman -Syu --noconfirm && \
-    # Set default choice for bluez-libs provider
+    pacman -Rns --noconfirm pulseaudio && \
     echo "1" | pacman -S --noconfirm \
         lib32-vulkan-radeon \
         libva-mesa-driver \
@@ -15,8 +15,6 @@ RUN pacman -Syu --noconfirm && \
         openal \
         pipewire \
         pipewire-pulse && \
-    # Remove pulseaudio to resolve conflicts with pipewire
-    pacman -Rns --noconfirm pulseaudio && \
     pacman -S --noconfirm \
         pipewire-alsa \
         pipewire-jack \
