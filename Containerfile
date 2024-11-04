@@ -3,7 +3,6 @@ FROM lscr.io/linuxserver/steamos:latest
 
 # Update and install additional packages
 RUN pacman -Syu --noconfirm && \
-    pacman -Rns --noconfirm pulseaudio && \
     echo "1" | pacman -S --noconfirm \
         lib32-vulkan-radeon \
         libva-mesa-driver \
@@ -12,16 +11,8 @@ RUN pacman -Syu --noconfirm && \
         vulkan-mesa-layers \
         lib32-vulkan-mesa-layers \
         lib32-libnm \
-        openal \
-        pipewire \
-        pipewire-pulse && \
+        openal && \
     pacman -S --noconfirm \
-        pipewire-alsa \
-        pipewire-jack \
-        wireplumber \
-        lib32-pipewire \
-        lib32-pipewire-jack \
-        lib32-libpulse \
         lib32-openal && \
     pacman -S --noconfirm \
         xdg-desktop-portal-kde \
