@@ -46,13 +46,8 @@ RUN pacman -Sc --noconfirm && rm -rf /var/cache/pacman/pkg/*
 CMD ["bash", "-c", "echo 'Customized SteamOS container started' && /bin/bash"]
 
 
-# Install paru manually (for AUR support)
-RUN pacman -Sy --noconfirm git base-devel && \
-    git clone https://aur.archlinux.org/paru.git /tmp/paru && \
-    cd /tmp/paru && \
-    makepkg -si --noconfirm && \
-    rm -rf /tmp/paru
-
+# Install paru (for AUR support)
+RUN pacman -Sy --noconfirm git paru
 # Install EmuDeck
 RUN curl -L https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/install.sh | bash
 
